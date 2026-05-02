@@ -1,0 +1,136 @@
+<Window x:Class="VisualProgressTimer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Visual Progress Timer"
+        Icon="Assets/AppIcon.ico"
+        Width="560"
+        Height="640"
+        MinWidth="420"
+        MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        Background="{Binding WindowBackgroundBrush, RelativeSource={RelativeSource Self}}"
+        KeyDown="Window_KeyDown"
+        PreviewMouseWheel="Window_PreviewMouseWheel"
+        SizeChanged="Window_SizeChanged">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="MinWidth" Value="72" />
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Background" Value="#E7EBF0" />
+            <Setter Property="Foreground" Value="#1D2430" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="18"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid x:Name="Root" Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Menu x:Name="SettingsMenu"
+              Background="Transparent"
+              Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}">
+            <Menu.Resources>
+                <Style x:Key="DropdownMenuItemStyle" TargetType="MenuItem">
+                    <Setter Property="Foreground" Value="#1C222A" />
+                    <Setter Property="Background" Value="#F6F8FB" />
+                </Style>
+            </Menu.Resources>
+            <MenuItem Header="Settings"
+                      Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}">
+                <MenuItem Header="Color" Style="{StaticResource DropdownMenuItemStyle}">
+                    <MenuItem Header="Navy" Click="PresetColor_Click" Tag="#202A44" Style="{StaticResource DropdownMenuItemStyle}" />
+                    <MenuItem Header="Red" Click="PresetColor_Click" Tag="#D94A3A" Style="{StaticResource DropdownMenuItemStyle}" />
+                    <MenuItem Header="Green" Click="PresetColor_Click" Tag="#2E7D6B" Style="{StaticResource DropdownMenuItemStyle}" />
+                    <MenuItem Header="Custom..." Click="PickColorButton_Click" Style="{StaticResource DropdownMenuItemStyle}" />
+                </MenuItem>
+                <MenuItem x:Name="DarkModeMenuItem"
+                          Header="Dark mode"
+                          IsCheckable="True"
+                          Checked="ThemeControl_Changed"
+                          Unchecked="ThemeControl_Changed"
+                          Style="{StaticResource DropdownMenuItemStyle}" />
+                <MenuItem x:Name="TopmostMenuItem"
+                          Header="Always on top"
+                          IsCheckable="True"
+                          Checked="TopmostControl_Changed"
+                          Unchecked="TopmostControl_Changed"
+                          Style="{StaticResource DropdownMenuItemStyle}" />
+                <MenuItem x:Name="BorderlessMenuItem"
+                          Header="Floating mode"
+                          IsCheckable="True"
+                          Checked="BorderlessControl_Changed"
+                          Unchecked="BorderlessControl_Changed"
+                          Style="{StaticResource DropdownMenuItemStyle}" />
+                <Separator />
+                <MenuItem Header="About" Click="AboutMenuItem_Click" Style="{StaticResource DropdownMenuItemStyle}" />
+            </MenuItem>
+        </Menu>
+
+        <Border x:Name="TimerSurface"
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                MouseLeftButtonDown="TimerSurface_MouseLeftButtonDown"
+                MouseLeftButtonUp="TimerSurface_MouseLeftButtonUp"
+                MouseRightButtonDown="TimerSurface_MouseRightButtonDown"
+                MouseMove="TimerSurface_MouseMove">
+            <Grid>
+                <Canvas x:Name="TimerCanvas" />
+            </Grid>
+        </Border>
+
+        <Border x:Name="ControlsPanel"
+                Grid.Row="2"
+                Margin="0,18,0,0"
+                Padding="12"
+                CornerRadius="24"
+                Background="{Binding PanelBrush, RelativeSource={RelativeSource AncestorType=Window}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="StartStopButton" Click="StartStopButton_Click" Content="Start" />
+                </StackPanel>
+
+                <TextBlock x:Name="TimeText"
+                           Grid.Column="1"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="28"
+                           FontWeight="SemiBold"
+                           Text="45:00"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+                <TextBlock Grid.Column="2"
+                           VerticalAlignment="Center"
+                           FontSize="13"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+                           Text="MAX 60m" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
